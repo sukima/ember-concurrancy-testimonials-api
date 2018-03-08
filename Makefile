@@ -1,6 +1,6 @@
 TESTIMONIALS := $(patsubst testimonials/%.md,dist/testimonials/%.json,$(wildcard testimonials/*.md))
 
-.PHONY: all deploy subtree testimonial
+.PHONY: all deploy testimonial
 
 all: node_modules dist/testimonials.json
 
@@ -16,10 +16,9 @@ dist/testimonials/%.json: testimonials/%.md
 	bin/convert-to-json $< > $@
 
 deploy: all
+	-git add dist
+	-git commit -m "Update gh-pages"
 	git push -f origin gh-pages:gh-pages
-
-subtree:
-	git subtree split --prefix dist -b gh-pages
 
 testimonial:
 	bin/create-testimonial
