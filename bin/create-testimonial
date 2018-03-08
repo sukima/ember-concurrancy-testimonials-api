@@ -1,0 +1,23 @@
+#!/bin/bash
+
+FILE_NOW="$(TZ=UTC date +"%Y-%m-%d")"
+TIMESTAMP_NOW="$(TZ=UTC date +"%Y-%m-%dT%H:%M:%SZ")"
+
+if [[ -n "$1" ]]; then
+	AUTHOR="$1"
+else
+	read -r -p "Name of author: " AUTHOR
+fi
+
+testimonial_file="testimonials/${FILE_NOW}-${AUTHOR// /-}.md"
+
+cat > "${testimonial_file}" <<EOF
+---
+title: title of testimonial
+author: ${AUTHOR}
+date: ${TIMESTAMP_NOW}
+---
+Testimonial here (Markdown)
+EOF
+
+exec ${VISUAL:-vi} "${testimonial_file}"

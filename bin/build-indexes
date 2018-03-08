@@ -1,0 +1,58 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+const PAGE_SIZE = 10;
+
+function loadResource(file) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(file, (err, content) => {
+      if (err) { return reject(err); }
+      resolve(content);
+    });
+  })
+  .then(JSON.parse);
+}
+
+function saveFile(file, content) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(file, content, 'utf-8', err => {
+      if (err) { return reject(err); }
+      resolve();
+    });
+  });
+}
+
+let [,, indexFile, ...jsonFiles] = process.argv;
+let resourceName = path.basename(indexFile, '.json');
+let chunks = [];
+let lastChunkUrl = null;
+
+while (jsonFiles.length > 0) {
+  chunks.push(jsonFiles.splice(0, PAGE_SIZE));
+}
+
+for (let i = 0; i < chunks.length; i++) {
+  let page = i + 1;
+  let pages = chunks.length;
+  let chunk = chunks[i];
+  let previousUrl = lastChunkUrl;
+  let currentUrl = page > 1 ? `/${resourceName}-${page}.json` : `/${resourceName}.json`;
+  let nextUrl = page < pages ? `/${resourceName}-${page + 1}.json` : null;
+  let pagination = {
+    next_url: nextUrl,
+    self_url: currentUrl,
+    previous_url: previousUrl,
+    total: jsonFiles.length,
+    size: PAGE_SIZE,
+    pages, page
+  };
+  lastChunkUrl = currentUrl;
+  Promise.all(chunk.map(loadResource)).then(resources => {
+    let payload = {
+      [resourceName]: resources,
+      pagination
+    };
+    return saveFile(path.join('dist', currentUrl), JSON.stringify(payload));
+  });
+}
