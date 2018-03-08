@@ -32,10 +32,9 @@ while (jsonFiles.length > 0) {
   chunks.push(jsonFiles.splice(0, PAGE_SIZE));
 }
 
-for (let i = 0; i < chunks.length; i++) {
+let tasks = chunks.map((chunk, i) => {
   let page = i + 1;
   let pages = chunks.length;
-  let chunk = chunks[i];
   let previousUrl = lastChunkUrl;
   let currentUrl = page > 1 ? `/${resourceName}-${page}.json` : `/${resourceName}.json`;
   let nextUrl = page < pages ? `/${resourceName}-${page + 1}.json` : null;
@@ -48,11 +47,16 @@ for (let i = 0; i < chunks.length; i++) {
     pages, page
   };
   lastChunkUrl = currentUrl;
-  Promise.all(chunk.map(loadResource)).then(resources => {
+  return Promise.all(chunk.map(loadResource)).then(resources => {
     let payload = {
       [resourceName]: resources,
       pagination
     };
     return saveFile(path.join('dist', currentUrl), JSON.stringify(payload));
   });
-}
+});
+
+Promise.all(tasks).catch(err => {
+  console.error(err);
+  process.exit(1);
+});
