@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "markdown-it": "^8.4.1",
+    "markdown-it-highlightjs": "^3.0.0",
     "static-api-generator": "^2.0.0",
     "yaml-front-matter": "^3.4.1"
   }

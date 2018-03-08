@@ -5,7 +5,8 @@ const fs = require('fs');
 const MarkdownIt = require('markdown-it');
 const frontMatter = require('yaml-front-matter');
 
-let md = new MarkdownIt();
+let md = new MarkdownIt()
+  .use(require('markdown-it-highlightjs'));
 let yamlFile = process.argv[2];
 var hash = crypto.createHash('md5');
 
