@@ -1,11 +1,14 @@
 TESTIMONIALS := $(patsubst testimonials/%.md,dist/testimonials/%.json,$(shell ls -1t testimonials/*.md))
 
-.PHONY: all deploy subtree testimonial
+.PHONY: all deploy clean testimonial
 
-all: node_modules dist/testimonials.json
+all: node_modules dist dist/testimonials.json
 
 node_modules: package.json yarn.lock
 	yarn
+
+dist:
+	git worktree add dist gh-pages
 
 dist/testimonials.json: $(TESTIMONIALS)
 	@mkdir -p dist
@@ -16,12 +19,13 @@ dist/testimonials/%.json: testimonials/%.md
 	bin/convert-to-json testimonial $@ $<
 
 deploy: all
-	-git add dist
-	-git commit -m "Update gh-pages"
-	git subtree push --prefix dist origin gh-pages
+	@cd dist
+	git add --all
+	git commit -m "Deploy to gh-pages"
+	git push origin gh-pages
 
-subtree:
-	git subtree split --prefix dist -b gh-pages
+clean:
+	rm -rf dist
 
 testimonial:
 	bin/create-testimonial
