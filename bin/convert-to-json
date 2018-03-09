@@ -6,6 +6,8 @@ const crypto = require('crypto');
 const MarkdownIt = require('markdown-it');
 const frontMatter = require('yaml-front-matter');
 
+const MAX_EXCERPT_WORDS = 50;
+
 function readFile(file) {
   return new Promise((resolve, reject) => {
     fs.readFile(file, (err, content) => {
@@ -24,12 +26,18 @@ function writeFile(file, content) {
   });
 }
 
+function excerpt(content) {
+  // /\s+/ includes \n which we want to preserve.
+  return content.split(/[ \t]+/, MAX_EXCERPT_WORDS).join(' ');
+}
+
 function parseResource(resourceName, resourceFile, content) {
   let resourcePath = path.dirname(resourceFile);
   let resource = frontMatter.loadFront(content, 'markdown');
   resource.id = hash.update(content).digest('hex');
   resource['self_url'] = path.join('/', resourcePath, `${resource.id}.json`);
   resource.rendered = md.render(resource.markdown);
+  resource.excerpt = md.render(excerpt(resource.markdown));
   return JSON.stringify({
     [resourceName]: resource
   });
