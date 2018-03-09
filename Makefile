@@ -8,10 +8,9 @@ node_modules: package.json yarn.lock
 	yarn
 
 dist:
-	git worktree add dist gh-pages
+	git worktree add dist gh-pages || mkdir -p dist
 
 dist/testimonials.json: $(TESTIMONIALS)
-	@mkdir -p dist
 	bin/build-indexes $@ $(TESTIMONIALS)
 
 dist/testimonials/%.json: testimonials/%.md
