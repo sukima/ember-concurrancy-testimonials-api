@@ -1,4 +1,4 @@
-TESTIMONIALS := $(patsubst testimonials/%.md,dist/testimonials/%.json,$(wildcard testimonials/*.md))
+TESTIMONIALS := $(patsubst testimonials/%.md,dist/testimonials/%.json,$(shell ls -1t testimonials/*.md))
 
 .PHONY: all deploy subtree testimonial
 
