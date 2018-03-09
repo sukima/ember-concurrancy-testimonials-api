@@ -5,7 +5,7 @@ const path = require('path');
 const MarkdownIt = require('markdown-it');
 const frontMatter = require('yaml-front-matter');
 
-const MAX_EXCERPT_WORDS = 100;
+const MAX_EXCERPT_WORDS = 25;
 
 function readFile(file) {
   return new Promise((resolve, reject) => {
