@@ -13,7 +13,7 @@ dist/testimonials.json: $(TESTIMONIALS)
 
 dist/testimonials/%.json: testimonials/%.md
 	@mkdir -p dist/testimonials
-	bin/convert-to-json $< > $@
+	bin/convert-to-json testimonial $@ $<
 
 deploy: all
 	-git add dist
