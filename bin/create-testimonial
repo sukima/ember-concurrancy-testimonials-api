@@ -9,7 +9,7 @@ else
 	read -r -p "Name of author: " AUTHOR
 fi
 
-testimonial_file="testimonials/${FILE_NOW}-${AUTHOR// /-}.md"
+testimonial_file="testimonials/${FILE_NOW}-${AUTHOR//[ \(\)\{\}\[\]:@%,\$\#\!]/-}.md"
 
 cat > "${testimonial_file}" <<EOF
 ---
