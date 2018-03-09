@@ -8,7 +8,7 @@ node_modules: package.json yarn.lock
 	yarn
 
 dist:
-	git worktree add dist gh-pages || mkdir -p dist
+	git worktree add dist gh-pages
 
 dist/testimonials.json: $(TESTIMONIALS)
 	bin/build-indexes $@ $(TESTIMONIALS)
@@ -24,7 +24,7 @@ deploy: all
 	git push origin gh-pages
 
 clean:
-	rm -rf dist
+	rm -rf dist/*
 
 testimonial:
 	bin/create-testimonial
