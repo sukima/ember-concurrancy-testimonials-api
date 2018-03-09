@@ -19,7 +19,7 @@ dist/testimonials/%.json: testimonials/%.md
 	bin/convert-to-json testimonial $@ $<
 
 deploy: all
-	@cd dist
+	cd dist
 	git add --all
 	git commit -m "Deploy to gh-pages"
 	git push origin gh-pages
