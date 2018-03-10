@@ -24,6 +24,7 @@ function saveFile(file, content) {
 }
 
 let [,, indexFile, ...jsonFiles] = process.argv;
+let totalResources = jsonFiles.length;
 let resourceName = path.basename(indexFile, '.json');
 let chunks = [];
 let lastChunkUrl = null;
@@ -42,7 +43,7 @@ let tasks = chunks.map((chunk, i) => {
     next_url: nextUrl,
     self_url: currentUrl,
     previous_url: previousUrl,
-    total: jsonFiles.length,
+    total: totalResources,
     size: PAGE_SIZE,
     pages, page
   };
