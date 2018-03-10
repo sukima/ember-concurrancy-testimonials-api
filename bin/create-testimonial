@@ -6,7 +6,11 @@ TIMESTAMP_NOW="$(TZ=UTC date +"%Y-%m-%dT%H:%M:%SZ")"
 if [[ -n "$1" ]]; then
 	AUTHOR="$1"
 else
-	read -r -p "Name of author: " AUTHOR
+	read -r -p "Name of author (enter for anonymous): " AUTHOR
+fi
+
+if [[ -z "$AUTHOR" ]]; then
+	AUTHOR="Anonymous"
 fi
 
 testimonial_file="testimonials/${FILE_NOW}-${AUTHOR//[ \(\)\{\}\[\]:@%,\$\#\!]/-}.md"
