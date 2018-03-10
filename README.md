@@ -19,6 +19,17 @@ $ make testimonial
 
 When complete create a Pull Request with the new testimonial.
 
+## YAML Front Matter
+
+Each testimonial has the following known YAML front matter properties:
+
+| Property | Format              | Required     | Description |
+|----------|---------------------|--------------|-------------|
+| `title`  | String              | ✓ (required) | A short/witty title or headline to the tesimonial. |
+| `author` | String              | ✓ (required) | The name/email/GitHub name of the author. This can be anything including *Anonymous*. |
+| `link`   | URL                 | ✗ (optional) | A URL that the author's name will link to. |
+| `date`   | ISO 8601 UTC (Zulu) | ✓ (required) | The creation or modification date of the testimonial. |
+
 ## Deployment
 
 Once merged the repo admin can execute `make deploy` which will build a JSON
